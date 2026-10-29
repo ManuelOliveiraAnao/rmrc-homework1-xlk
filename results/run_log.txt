@@ -1,0 +1,225 @@
+
+==============================================================================
+0. DATA
+==============================================================================
+Sample: 2015-01-02 to 2026-10-27, T = 2972 daily obs
+Earnings events (AAPL, MSFT, NVDA): 257; news days: 140 (good = above-median surprise: 62, bad = below-median: 80; days with 2 releases may be both)
+        mean    std     min     max   skew  ex.kurt         JB  JB p  ann.mean %  ann.vol %
+r_XLK  0.079  1.514 -14.866  12.598 -0.290    8.841   9684.601   0.0      19.924     24.038
+r_SP   0.044  1.112 -12.765   9.089 -0.645   15.948  31587.342   0.0      11.209     17.648
+dVIX  -0.003  8.028 -44.245  76.825  1.214    7.414   7509.252   0.0      -0.776    127.436
+
+XLK return on news vs non-news days:
+      count   mean    std  mean|r|
+NEWS                              
+0      2832  0.075  1.498    1.032
+1       140  0.163  1.817    1.350
+
+==============================================================================
+1. STATIONARITY (ADF H0: unit root; KPSS H0: stationary) + Ljung-Box
+==============================================================================
+           det.      ADF   ADF p    KPSS  KPSS p
+series                                          
+ln P XLK     ct  -3.3567  0.0575  0.2765    0.01
+ln P SP500   ct  -3.4948  0.0400  0.4138    0.01
+VIX level     c  -5.9005  0.0000  0.8955    0.01
+r_XLK         c -18.3609  0.0000  0.0524    0.10
+r_SP          c -17.6726  0.0000  0.0615    0.10
+dlnVIX        c -22.7958  0.0000  0.0109    0.10
+
+                       Q  p-value
+r_XLK Q(5)       55.2171      0.0
+r_XLK Q(10)     150.0795      0.0
+r_XLK Q(20)     184.7696      0.0
+r_XLK^2 Q(5)   1265.4239      0.0
+r_XLK^2 Q(10)  1853.4850      0.0
+r_XLK^2 Q(20)  2183.3982      0.0
+
+==============================================================================
+2. CONDITIONAL MEAN SPECIFICATION (OLS)
+==============================================================================
+                      R2  adj R2        AIC        BIC  RESET F  RESET p  LB Q(10)    LB p  BG(5) F    BG p
+model                                                                                                      
+M1 CAPM           0.8439  0.8439  5383.0920  5395.0859  15.9161      0.0   18.5404  0.0465   1.4487  0.2035
+M2 CAPM+VIX       0.8444  0.8443  5375.3587  5393.3496  13.7466      0.0   17.7312  0.0597   1.5910  0.1591
+M3 CAPM+VIX+News  0.8457  0.8455  5355.1963  5385.1812  13.8657      0.0   18.6866  0.0444   1.7660  0.1164
+
+RESET robust to heteroskedasticity (M3): power 2 HC3: p = 0.0228, power 2 HAC: p = 0.0056, power 3 HC3: p = 0.6812, power 3 HAC: p = 0.0082
+
+Year-by-year beta_SP (parameter instability is a likely source of the RESET rejection):
+Date      2015   2016   2017   2018   2019   2020   2021   2022   2023  2024  2025   2026
+beta_SP  1.065  1.074  0.973  1.307  1.428  1.043  1.447  1.334  1.331  1.75  1.38  1.898
+Trend-beta model: beta_SP = 0.932 + 0.545*(t/T) (HAC p = 5.504e-16); R2 = 0.8548; RESET p = 0.0000
+
+AR(1) on residuals check: coef = -0.0061, HAC p = 0.7922
+
+==============================================================================
+3. FIT AND INFERENCE (final OLS spec M3, HAC Newey-West SE)
+==============================================================================
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  r_XLK   R-squared:                       0.846
+Model:                            OLS   Adj. R-squared:                  0.845
+Method:                 Least Squares   F-statistic:                     932.9
+Date:                Wed, 28 Oct 2026   Prob (F-statistic):               0.00
+Time:                        15:14:25   Log-Likelihood:                -2672.6
+No. Observations:                2972   AIC:                             5355.
+Df Residuals:                    2967   BIC:                             5385.
+Df Model:                           4                                         
+Covariance Type:                  HAC                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0199      0.011      1.754      0.079      -0.002       0.042
+r_SP           1.2179      0.045     27.192      0.000       1.130       1.306
+dVIX          -0.0063      0.004     -1.407      0.159      -0.015       0.002
+GOOD           0.3610      0.097      3.705      0.000       0.170       0.552
+BAD           -0.0944      0.092     -1.023      0.306      -0.275       0.086
+==============================================================================
+Omnibus:                      218.462   Durbin-Watson:                   2.011
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              928.180
+Skew:                          -0.227   Prob(JB):                    2.81e-202
+Kurtosis:                       5.700   Cond. No.                         56.5
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC) using 10 lags and without small sample correction
+
+                        Wald chi2  p-value
+hypothesis                                
+H0: alpha = 0              3.0770   0.0794
+H0: beta_SP = 1           23.6778   0.0000
+H0: beta_VIX = beta_SP   896.1676   0.0000
+H0: beta_VIX = 0           1.9791   0.1595
+H0: d_good = d_bad = 0    14.6837   0.0006
+H0: d_good = d_bad        11.3816   0.0007
+
+Annualised alpha (OLS): 5.01% per year
+
+==============================================================================
+4. RESIDUAL DIAGNOSTICS: kurtosis, Ljung-Box on e^2, ARCH-LM
+==============================================================================
+Residual skewness = -0.227, excess kurtosis = 2.700, JB = 928.2 (p = 0.0000)
+                   Q  p-value
+e Q(5)        8.8869   0.1137
+e Q(10)      18.6866   0.0444
+e Q(20)      36.5518   0.0132
+e^2 Q(5)    582.4544   0.0000
+e^2 Q(10)   946.5067   0.0000
+e^2 Q(20)  1669.3291   0.0000
+ARCH-LM(5): LM = 328.69, p = 6.742e-69
+
+==============================================================================
+5. LEVERAGE CHECK AND GJR-GARCH(1,1)-M ESTIMATION
+==============================================================================
+corr(r_t^2, r_t-1) = -0.0602;  corr(e_t^2, e_t-1) = -0.0391  (approx. 2*se = 0.0367)
+Negative values -> bad news raises next-day volatility more than good news (leverage effect).
+                         LL   k      AIC      BIC
+label                                            
+GARCH(1,1)         -2399.50   8  4814.99  4862.97
+GJR-GARCH(1,1)     -2398.98   9  4815.95  4869.92
+GJR-GARCH(1,1)-M   -2398.67  10  4817.34  4877.31
+GJR-GARCH(1,1)-M-X -2396.91  11  4815.81  4881.78
+
+                                                                 H0      LR  p-value
+nesting                                                                             
+GARCH(1,1) -> GJR-GARCH(1,1)                              gamma = 0  1.0420   0.3074
+GJR-GARCH(1,1) -> GJR-GARCH(1,1)-M                       lambda = 0  0.6090   0.4351
+GJR-GARCH(1,1)-M -> GJR-GARCH(1,1)-M + News in variance     phi = 0  3.5306   0.0602
+
+FINAL MODEL: GJR-GARCH(1,1)-M + News in variance (Gaussian QML, Bollerslev-Wooldridge robust SE)
+                    coef  robust se        z       p
+alpha             0.0427     0.0386   1.1044  0.2694
+beta_SP           1.2555     0.0224  55.9307  0.0000
+beta_VIX          0.0008     0.0022   0.3547  0.7228
+d_good            0.3563     0.0876   4.0678  0.0000
+d_bad            -0.0239     0.0833  -0.2865  0.7745
+lambda (in-mean) -0.0457     0.0763  -0.5988  0.5493
+omega             0.0057     0.0041   1.3976  0.1622
+alpha_arch        0.0797     0.0233   3.4128  0.0006
+gamma (GJR)      -0.0135     0.0206  -0.6524  0.5142
+beta_garch        0.9082     0.0373  24.3671  0.0000
+phi (news var)    0.0258     0.0219   1.1782  0.2387
+
+ROBUSTNESS: same model with Student-t innovations (LL = -2327.21, AIC = 4678.42, BIC = 4750.39)
+                    coef  robust se        z       p
+alpha             0.0453     0.0337   1.3446  0.1788
+beta_SP           1.2416     0.0201  61.6869  0.0000
+beta_VIX          0.0007     0.0021   0.3538  0.7235
+d_good            0.2892     0.0773   3.7402  0.0002
+d_bad            -0.0090     0.0871  -0.1036  0.9175
+lambda (in-mean) -0.0306     0.0682  -0.4484  0.6538
+omega             0.0023     0.0020   1.1278  0.2594
+alpha_arch        0.0750     0.0182   4.1093  0.0000
+gamma (GJR)      -0.0229     0.0180  -1.2705  0.2039
+beta_garch        0.9311     0.0272  34.2083  0.0000
+phi (news var)    0.0163     0.0170   0.9580  0.3381
+nu (t dof)        6.7324     0.8004   8.4108  0.0000
+
+Baseline GJR-GARCH(1,1)-M (no news in variance) for reference:
+                    coef  robust se        z       p
+alpha             0.0490     0.0386   1.2712  0.2037
+beta_SP           1.2563     0.0223  56.3683  0.0000
+beta_VIX          0.0008     0.0023   0.3655  0.7147
+d_good            0.3503     0.0871   4.0235  0.0001
+d_bad            -0.0166     0.0830  -0.2003  0.8412
+lambda (in-mean) -0.0577     0.0762  -0.7576  0.4487
+omega             0.0064     0.0037   1.7064  0.0879
+alpha_arch        0.0783     0.0204   3.8320  0.0001
+gamma (GJR)      -0.0141     0.0204  -0.6904  0.4899
+beta_garch        0.9115     0.0321  28.4244  0.0000
+
+BENCHMARK: GJR-GARCH(1,1) on raw XLK returns (constant mean, no market factor)
+            coef  robust se       p
+mu        0.0664     0.0206  0.0012
+omega     0.0533     0.0168  0.0015
+alpha[1]  0.0518     0.0213  0.0152
+gamma[1]  0.1338     0.0362  0.0002
+beta[1]   0.8571     0.0258  0.0000
+
+Standardised residuals z_t = e_t / sqrt(h_t):
+skew = -0.335, excess kurtosis = 2.011
+                 Q  p-value
+z Q(5)      4.7223   0.4507
+z Q(10)     9.9219   0.4474
+z Q(20)    19.7776   0.4719
+z^2 Q(5)   12.4220   0.0294
+z^2 Q(10)  15.9496   0.1011
+z^2 Q(20)  20.8556   0.4057
+ARCH-LM(5) on z: p = 0.0239
+corr(z_t^2, z_t-1) = -0.0319
+
+==============================================================================
+6. PARAMETER CHECKS AND INFERENCE IN FINAL MODEL
+==============================================================================
+                                         Wald chi2  p-value
+hypothesis                                                 
+H0: alpha = 0                               1.2198   0.2694
+H0: beta_SP = 1                           129.5255   0.0000
+H0: beta_VIX = beta_SP                   3631.7357   0.0000
+H0: beta_VIX = 0                            0.1258   0.7228
+H0: d_good = d_bad = 0                     16.6911   0.0002
+H0: d_good = d_bad                         10.1279   0.0015
+H0: lambda = 0 (no risk premium)            0.3585   0.5493
+H0: gamma = 0 (symmetry)                    0.4256   0.5142
+H0: phi = 0 (news do not move variance)     1.3882   0.2387
+H0: alpha + beta = 1 (IGARCH)               0.3704   0.5428
+H0: alpha + gamma/2 + beta = 1              2.1719   0.1405
+
+omega = 0.0057 (> 0: True)
+alpha + beta = 0.9878 (< 1: True)
+alpha + gamma/2 + beta = 0.9811 (< 1: True)  -> half-life of a shock = 36.3 days
+alpha + gamma >= 0: True
+Unconditional variance (non-news day) = 0.3009 -> ann. vol = 8.71%
+News-day variance shift phi = 0.0258 (= 8.6% of unconditional daily variance)
+alpha annualised = 10.75%;  risk premium at avg sigma: lambda*mean(sigma) = -0.0258% per day
+
+Largest conditional volatility dates (annualised %):
+Date
+2026-07-06    24.3
+2026-07-09    23.6
+2026-08-05    23.6
+2026-07-08    23.6
+2026-07-07    23.4
+
+Done. Tables in results/, figures in figures/.
