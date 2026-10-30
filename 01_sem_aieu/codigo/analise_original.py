@@ -27,8 +27,10 @@ from statsmodels.tsa.stattools import adfuller, kpss
 from statsmodels.tools.numdiff import approx_hess, approx_fprime
 
 warnings.filterwarnings("ignore")
-HERE = os.path.dirname(os.path.abspath(__file__))
-DATA, RES, FIG = (os.path.join(HERE, d) for d in ("data", "results", "figures"))
+HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(HERE, "dados")
+RES = os.path.join(HERE, "resultados", "amostra_original")
+FIG = os.path.join(HERE, "graficos", "amostra_original")
 for d in (DATA, RES, FIG):
     os.makedirs(d, exist_ok=True)
 

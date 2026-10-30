@@ -1,0 +1,16 @@
+{
+  "likelihood_and_information_criteria": "Independently recomputed, all four models",
+  "holdout_errors_and_common_proxy_QLIKE": "Independently recomputed, all four models",
+  "lag_alignment": "First observation, a Monday, last observation",
+  "positive_filtered_variances": "All models, all observations",
+  "same_sample": 2971,
+  "train_n": 2376,
+  "test_n": 595,
+  "caveats": [
+    "Conditional holdout uses observed same-day market and VIX.",
+    "Revised AI-EU and inherited earnings labels: not a real-time backtest.",
+    "Absolute changes reject KPSS; volatility extension is exploratory.",
+    "Variance AI coefficient constrained nonnegative; inference is approximate."
+  ],
+  "original_full_sample_replication_LL": -2396.9054388547193
+}

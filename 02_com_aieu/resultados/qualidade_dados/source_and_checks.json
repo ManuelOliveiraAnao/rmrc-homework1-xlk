@@ -1,0 +1,22 @@
+{
+  "source": "https://www.policyuncertainty.com/aieu_daily.html",
+  "download": "https://www.policyuncertainty.com/media/All_Daily_AIEU_Data.csv",
+  "sha256": "8311a1d866a7ab18a1d827f7957202f4f97fd021409b8447a943650c8056d63c",
+  "source_first": "2015-01-01",
+  "source_last": "2026-10-29",
+  "identical_duplicates_removed": 1,
+  "calendar_gaps": 0,
+  "original_n": 2972,
+  "comparison_n": 2971,
+  "comparison_first": "2015-01-05",
+  "comparison_last": "2026-10-27",
+  "dropped_trading_dates": [
+    "2015-01-02"
+  ],
+  "alignment": "Previous calendar day change; lag applied before trading-day join",
+  "revisions": "Source revises last 30 days. This is a revised-data pseudo holdout, not a real-time backtest.",
+  "evaluation": "Conditional holdout uses same-day observed market and VIX. Original earnings labels use full-sample medians. Not an ex-ante trading forecast.",
+  "magnitude_stationarity": "Absolute changes reject level stationarity under KPSS; variance extension is exploratory.",
+  "inherited_limits": "Original earnings labels and dates retained, including full-sample medians and original event mapping. No causal claim.",
+  "license": "CC BY 4.0; Economic Policy Uncertainty / policyuncertainty.com"
+}
