@@ -1,76 +1,74 @@
-# RMRC Homework I — XLK, earnings e AI-EU
+# RMRC Homework I — XLK, earnings and AI-EU
 
-Análise dos retornos e da volatilidade do ETF XLK com CAPM e
-GJR-GARCH(1,1)-M. Os anúncios de resultados selecionados são os de Apple
-(AAPL), Microsoft (MSFT) e Nvidia (NVDA), controlando pelo S&P 500 e VIX.
-A extensão testa mudanças no índice de cobertura de inteligência artificial,
-economia e incerteza [AI-EU](https://www.policyuncertainty.com/aieu_daily.html).
+Analysis of XLK ETF returns and volatility using CAPM and GJR-GARCH(1,1)-M.
+The selected earnings announcements are those of Apple (AAPL), Microsoft
+(MSFT) and Nvidia (NVDA), controlling for the S&P 500 and VIX. The extension
+tests changes in the [AI-EU](https://www.policyuncertainty.com/aieu_daily.html)
+index of newspaper coverage of artificial intelligence, economics and uncertainty.
 
-## Organização
+## Project structure
 
-| Pasta | Código e resultados |
+| Folder | Code and results |
 |---|---|
-| [`01_sem_aieu/`](01_sem_aieu/README.md) | Modelo sem AI-EU; inclui o trabalho original e a estimação na amostra comum |
-| [`02_com_aieu/`](02_com_aieu/README.md) | Modelos com AI-EU no retorno, na variância e em ambos |
-| [`03_comparacao/`](03_comparacao/README.md) | Tabelas e gráficos comparativos; lê os resultados das duas versões |
+| [`01_without_aieu/`](01_without_aieu/README.md) | Baseline without AI-EU; includes the original project and common-sample estimates |
+| [`02_with_aieu/`](02_with_aieu/README.md) | AI-EU extensions in the mean, variance and both equations |
+| [`03_comparison/`](03_comparison/README.md) | Comparison tables and figures, read from the two separate versions |
 
-Cada versão tem as suas próprias pastas `codigo/`, `dados/`, `resultados/`
-e `graficos/`. As pastas 01 e 02 podem ser executadas de forma independente.
-Os ficheiros do trabalho original foram preservados dentro de `01_sem_aieu/`.
+Each version has its own `code/`, `data/`, `results/` and `figures/` folders.
+Folders 01 and 02 can run independently. The original project files are
+preserved under `01_without_aieu/`.
 
-## Executar a comparação
+## Run the comparison
 
-A partir da raiz do repositório:
+From the repository root:
 
 ```bash
 pip install -r requirements.txt
-python 01_sem_aieu/codigo/analise.py
-python 02_com_aieu/codigo/analise.py
-python 03_comparacao/codigo/comparar.py
-python verificar_organizacao.py
+python 01_without_aieu/code/analysis.py
+python 02_with_aieu/code/analysis.py
+python 03_comparison/code/compare.py
+python verify_organization.py
 ```
 
-Para repetir o pipeline original completo, com as 2 972 observações:
+To rerun the complete original pipeline with 2,972 observations:
 
 ```bash
-python 01_sem_aieu/codigo/analise_original.py
+python 01_without_aieu/code/original_analysis.py
 ```
 
-Cada versão também tem o seu próprio `requirements.txt`. Os dados estão
-guardados localmente; a extensão utiliza o snapshot AI-EU incluído, sem o
-substituir por um download mais recente durante a execução.
+Each version also has its own `requirements.txt`. Input data are cached
+locally. The extension uses the included AI-EU snapshot rather than replacing
+it with a newer download when running the analysis.
 
-## Amostras e interpretação
+## Samples and interpretation
 
-- Trabalho original: 02/01/2015 a 27/10/2026, 2 972 observações diárias.
-- Comparação: 05/01/2015 a 27/10/2026, as mesmas 2 971 observações nos quatro modelos.
-- Estimação da avaliação reservada: primeiras 2 376 observações.
-- Período reservado: últimas 595 observações, de 13/06/2024 a 27/10/2026.
+- Original project: January 2, 2015 to October 27, 2026; 2,972 daily observations.
+- Comparison: January 5, 2015 to October 27, 2026; the same 2,971 observations in all four models.
+- Holdout training sample: the first 2,376 observations.
+- Holdout evaluation: the last 595 observations, June 13, 2024 to October 27, 2026.
 
-O AI-EU entra como mudança de `log(1 + índice)`, com atraso de um dia de
-calendário; na equação da variância usa-se a magnitude da mudança.
-O nível do índice apresenta sinais de não estacionariedade. A magnitude das
-mudanças também rejeita KPSS, pelo que a extensão na variância é exploratória.
+AI-EU enters as the change in `log(1 + index)`, lagged by one calendar day.
+The variance equation uses the magnitude of that change. The index level
+shows evidence of nonstationarity. Absolute changes also reject KPSS level
+stationarity, so the variance extension is exploratory.
 
-Nas versões testadas, a inclusão do AI-EU não apresenta uma melhoria
-convincente: o BIC favorece o modelo original, a vantagem de AIC na variância
-é pequena e não se traduz em menor perda de variância no período reservado.
-As diferenças de perdas são descritivas, sem um teste da sua significância.
+In the tested specifications, AI-EU does not provide a convincing improvement:
+BIC favors the baseline, and the small AIC advantage in the variance extension
+does not translate into a lower holdout variance loss. Loss differences are
+descriptive; their statistical significance has not been tested.
 
-A avaliação é condicional aos valores contemporâneos observados do S&P 500
-e VIX e mantém as classificações de earnings do projeto original, que usam
-medianas da amostra completa. O AI-EU está sujeito a revisões. Estes resultados
-não demonstram causalidade nem constituem um backtest de trading em tempo real.
+Evaluation is conditional on observed contemporaneous S&P 500 and VIX values.
+It retains the original earnings classifications, which use full-sample
+medians. AI-EU data are subject to revisions. These results do not establish
+causality and are not a real-time trading backtest.
 
-Os README individuais descrevem os modelos e os ficheiros. A metodologia
-da extensão está documentada em
-[`03_comparacao/METODOLOGIA_ORIGINAL.md`](03_comparacao/METODOLOGIA_ORIGINAL.md),
-com uma nota sobre os caminhos do pacote anterior.
+The individual README files describe each model and its files. Full extension
+methodology is documented in [`03_comparison/METHODOLOGY.md`](03_comparison/METHODOLOGY.md).
 
-## Fontes
+## Sources
 
-- Preços e earnings: Yahoo Finance, conforme o projeto original.
+- Prices and earnings: Yahoo Finance, as in the original project.
 - AI-EU: [Economic Policy Uncertainty](https://www.policyuncertainty.com/aieu_daily.html),
-  série `daily_aieu_index`, snapshot de 30/10/2026. Licença CC BY 4.0.
-- Verificações: [`validacao_organizacao.json`](validacao_organizacao.json)
-  e `python verificar_organizacao.py`.
+  series `daily_aieu_index`, snapshot downloaded October 30, 2026. CC BY 4.0 license.
+- Validation: [`organization_validation.json`](organization_validation.json)
+  and `python verify_organization.py`.

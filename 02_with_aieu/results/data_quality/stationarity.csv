@@ -1,0 +1,5 @@
+series,ADF_p,KPSS_p
+AI-EU level,0.5055333853792316,0.01
+log(1+AI-EU),0.38807551308088095,0.01
+delta log(1+AI-EU),0.0,0.1
+abs(delta log(1+AI-EU)),9.054422431951842e-12,0.01

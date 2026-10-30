@@ -1,0 +1,14 @@
+{
+  "codes_executed": [
+    "01_without_aieu/code/analysis.py",
+    "02_with_aieu/code/analysis.py",
+    "03_comparison/code/compare.py"
+  ],
+  "original_outputs_preserved": true,
+  "coefficient_reproduction_tolerance": 1e-06,
+  "common_sample_n": 2971,
+  "training_n": 2376,
+  "evaluation_n": 595,
+  "independent_inputs": true,
+  "note": "The full legacy original pipeline was relocated and syntax-checked; its existing results were preserved, not rerun."
+}
