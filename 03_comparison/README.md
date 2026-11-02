@@ -6,6 +6,7 @@ the models. Run it after executing the individual model scripts:
 
 ```bash
 python code/compare.py
+python code/supplementary_tests.py
 ```
 
 All models are compared on the same 2,971 observations. QLIKE uses the same

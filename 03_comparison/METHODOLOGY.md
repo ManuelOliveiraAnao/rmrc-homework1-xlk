@@ -10,13 +10,24 @@ Does information about changes in newspaper coverage of AI, economics and
 uncertainty improve a GJR-GARCH(1,1)-M model with earnings in the mean and variance?
 
 The tested transformations and sample do not show a convincing improvement.
-In the mean equation, the additional coefficient is -0.00798 percentage points
-per standard deviation of the logarithmic index change, with robust p = 0.3949.
-In the variance equation, absolute changes have a coefficient of 0.002275 and
-an approximate robust p = 0.2210. The variance extension improves AIC by only
-1.05 points, while worsening BIC by 4.95 points and holdout QLIKE loss by 0.62%.
+In the mean equation, the additional coefficient is -0.00808 percentage points
+per standard deviation of the logarithmic index change, with robust p = 0.3895.
+In the variance equation, absolute changes have a coefficient of 0.002352 and
+an approximate robust p = 0.2057. The variance extension improves AIC by only
+1.25 points, while worsening BIC by 4.75 points and holdout QLIKE loss by 0.66%.
 Holdout differences are descriptive; their statistical significance has not
 been established.
+
+## Earnings event correction (November 2026)
+
+The original pipeline mapped 116 pre-2015 earnings releases (Yahoo Finance
+history back to 2002) to the first sample day, January 2, 2015, and computed
+each firm's median surprise over 2002-2026. Pre-sample releases are now
+dropped before mapping. The sample contains 141 releases (47 per firm) on
+139 trading days, with GOOD/BAD split at the firm's in-sample median surprise
+(68 GOOD and 71 BAD days); 13 labels changed. All results in folders 01, 02
+and 03 were re-estimated. Conclusions are unchanged: GOOD remains positive
+and significant (0.336, robust p < 0.001, in the common-sample baseline).
 
 ## Source and preparation
 
@@ -81,10 +92,10 @@ in absolute AIC/BIC values relative to the original 2,972-observation summary.
 
 | Model | AIC | BIC | Change in AIC | Change in BIC |
 |---|---:|---:|---:|---:|
-| Re-estimated baseline | 4814.35 | 4880.31 | 0 | 0 |
-| AI-EU in mean | 4815.59 | 4887.55 | +1.25 | +7.24 |
-| AI-EU in variance | 4813.30 | 4885.26 | -1.05 | +4.95 |
-| AI-EU in both | 4814.43 | 4892.39 | +0.08 | +12.08 |
+| Re-estimated baseline | 4816.97 | 4882.94 | 0 | 0 |
+| AI-EU in mean | 4818.20 | 4890.16 | +1.22 | +7.22 |
+| AI-EU in variance | 4815.72 | 4887.68 | -1.25 | +4.75 |
+| AI-EU in both | 4816.82 | 4894.78 | -0.15 | +11.84 |
 
 Lower AIC/BIC is preferable. BIC favors the baseline in every comparison.
 AI-EU does not resolve residual ARCH effects or the OLS RESET rejection.
@@ -99,9 +110,9 @@ using past errors, with the initial state computed from the training sample only
 
 | Model | Change in return MSE | Change in QLIKE loss |
 |---|---:|---:|
-| AI-EU in mean | -0.030% | +0.059% |
-| AI-EU in variance | +0.214% | +0.623% |
-| AI-EU in both | +0.186% | +0.697% |
+| AI-EU in mean | -0.032% | +0.061% |
+| AI-EU in variance | +0.223% | +0.656% |
+| AI-EU in both | +0.193% | +0.733% |
 
 Lower loss is preferable. All variance models use the same realized-variance
 proxy: the baseline's squared holdout errors. This proxy is noisy and depends
@@ -125,6 +136,7 @@ pip install -r requirements.txt
 python 01_without_aieu/code/analysis.py
 python 02_with_aieu/code/analysis.py
 python 03_comparison/code/compare.py
+python 03_comparison/code/supplementary_tests.py
 python verify_organization.py
 ```
 

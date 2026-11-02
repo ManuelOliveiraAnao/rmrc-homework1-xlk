@@ -1,4 +1,4 @@
 model,LR,df,p_reference,caveat
-+ AI-EU in mean,0.7549120048015538,1,0.3849255031383658,Gaussian reference only; nonnegative variance coefficient on boundary; robust Wald preferred for mean.
-+ AI-EU in variance,3.046792313226433,1,0.08089677330162504,Gaussian reference only; nonnegative variance coefficient on boundary; robust Wald preferred for mean.
-+ AI-EU in both,3.9161329764137918,2,0.14113103580617137,Gaussian reference only; nonnegative variance coefficient on boundary; robust Wald preferred for mean.
++ AI-EU in mean,0.7751194278698676,1,0.37863796089480806,Gaussian reference only; nonnegative variance coefficient on boundary; robust Wald preferred for mean.
++ AI-EU in variance,3.250798977361228,1,0.0713886511866425,Gaussian reference only; nonnegative variance coefficient on boundary; robust Wald preferred for mean.
++ AI-EU in both,4.150986103249124,2,0.12549453695151735,Gaussian reference only; nonnegative variance coefficient on boundary; robust Wald preferred for mean.

@@ -27,6 +27,7 @@ pip install -r requirements.txt
 python 01_without_aieu/code/analysis.py
 python 02_with_aieu/code/analysis.py
 python 03_comparison/code/compare.py
+python 03_comparison/code/supplementary_tests.py
 python verify_organization.py
 ```
 

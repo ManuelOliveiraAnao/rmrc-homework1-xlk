@@ -93,6 +93,8 @@ ea = ea.dropna(subset=["Reported EPS"])
 def reaction_day(ts):
     """First trading day on which the market can react to the announcement."""
     d = pd.Timestamp(ts.date())
+    if d < px.index[0]:                                # pre-sample release: no reaction day in sample
+        return pd.NaT
     after_close = ts.hour + ts.minute / 60 >= 9.5      # released during/after session
     pos = tdays.searchsorted(d, side="right" if after_close else "left")
     return tdays[pos] if pos < len(tdays) else pd.NaT
@@ -101,6 +103,7 @@ def reaction_day(ts):
 ea["react"] = ea["datetime"].apply(reaction_day)
 ea = ea.dropna(subset=["react"])
 ea = ea[(ea.react >= tdays[0]) & (ea.react <= tdays[-1])]
+assert not ea.duplicated(["ticker", "react"]).any(), "one release per firm per reaction day"
 # Mega-caps almost always "beat" consensus, so a beat per se is expected news.
 # GOOD = surprise above the firm's median surprise in the sample; BAD = below (incl. misses).
 ea["good"] = (ea["Surprise(%)"] > ea.groupby("ticker")["Surprise(%)"].transform("median")).astype(int)

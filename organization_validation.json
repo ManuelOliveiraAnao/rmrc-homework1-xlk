@@ -1,14 +1,16 @@
 {
   "codes_executed": [
+    "01_without_aieu/code/original_analysis.py",
     "01_without_aieu/code/analysis.py",
     "02_with_aieu/code/analysis.py",
-    "03_comparison/code/compare.py"
+    "03_comparison/code/compare.py",
+    "03_comparison/code/supplementary_tests.py"
   ],
-  "original_outputs_preserved": true,
+  "original_outputs_preserved": false,
   "coefficient_reproduction_tolerance": 1e-06,
   "common_sample_n": 2971,
   "training_n": 2376,
   "evaluation_n": 595,
   "independent_inputs": true,
-  "note": "The full legacy original pipeline was relocated and syntax-checked; its existing results were preserved, not rerun."
+  "note": "November 2026: original pipeline rerun after fixing the earnings event mapping (pre-2015 releases dropped; in-sample medians). 02_with_aieu/data/dataset.csv is a copy of 01_without_aieu/data/dataset.csv. All downstream results re-estimated."
 }
